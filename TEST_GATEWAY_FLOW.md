@@ -159,4 +159,3 @@ Creates Strands Agent with:
 ## Summary
 
 The flow uses OAuth 2.0 Client Credentials for service-to-service authentication, with the Gateway validating tokens on each request. This ensures secure access to Lambda-based tools through the AgentCore Gateway.
-

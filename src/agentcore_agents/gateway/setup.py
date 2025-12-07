@@ -54,18 +54,35 @@ class GatewaySetup:
                 return response.get("gateway", response)
         return None
 
-    def get_or_create_lambda_target(self, gateway: dict, name: str | None = None) -> dict:
+    def get_or_create_lambda_target(
+        self,
+        gateway: dict,
+        name: str | None = None,
+        lambda_arn: str | None = None,
+        tool_schema: dict | None = None,
+    ) -> dict:
         existing = self._find_target_by_name(gateway, name)
         if existing:
             logger.info(f"Lambda target '{name}' already exists: {existing.get('arn', 'unknown')}")
             return existing
 
         logger.info(f"Creating Lambda target for gateway: {gateway['gatewayId']}")
+        
+        target_payload = None
+        if lambda_arn and tool_schema:
+            target_payload = {
+                "lambdaArn": lambda_arn,
+                "toolSchema": tool_schema,
+            }
+            logger.info(f"Using custom Lambda: {lambda_arn}")
+        else:
+            logger.info("Using demo Lambda (auto-generated)")
+        
         lambda_target = self.client.create_mcp_gateway_target(
             gateway=gateway,
             name=name,
             target_type="lambda",
-            target_payload=None,
+            target_payload=target_payload,
             credentials=None,
         )
         logger.info(f"Lambda target created: {lambda_target.get('arn', 'unknown')}")

@@ -29,6 +29,11 @@ agentcore-gateway-cleanup: ## Clean up the Agentcore gateway
 	uv run scripts/cleanup_gateway.py
 	@echo "Agentcore gateway cleanup completed."
 
+agentcore-lambda-deploy: ## Deploy Lambda function for Gateway tools
+	@echo "Deploying Lambda function..."
+	uv run scripts/deploy_lambda.py
+	@echo "Lambda deployment completed."
+
 
 ################################################################################
 ## Prek Commands

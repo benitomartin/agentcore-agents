@@ -30,8 +30,27 @@ def main() -> None:
         authorizer_config=cognito_response["authorizer_config"], name="AgentGateway"
     )
 
-    logger.info("Step 3: Getting or creating Lambda target (auto-generated for demo)")
-    lambda_target = setup.get_or_create_lambda_target(gateway, name="DemoTools")
+    logger.info("Step 3: Getting or creating Lambda target")
+    
+    lambda_config_path = Path("lambda_config.json")
+    lambda_arn = None
+    tool_schema = None
+    
+    if lambda_config_path.exists():
+        logger.info("Found lambda_config.json, using custom Lambda")
+        with lambda_config_path.open() as f:
+            lambda_config = json.load(f)
+        lambda_arn = lambda_config.get("lambda_arn")
+        tool_schema = lambda_config.get("tool_schema")
+    
+    if lambda_arn and tool_schema:
+        logger.info(f"Using custom Lambda: {lambda_arn}")
+        lambda_target = setup.get_or_create_lambda_target(
+            gateway, name="AgentTools", lambda_arn=lambda_arn, tool_schema=tool_schema
+        )
+    else:
+        logger.info("Using demo Lambda (auto-generated)")
+        lambda_target = setup.get_or_create_lambda_target(gateway, name="DemoTools")
 
     config = {
         "region": setup.region,

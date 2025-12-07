@@ -1,0 +1,49 @@
+{
+  "tools": [
+    {
+      "name": "calculator",
+      "description": "Evaluates a mathematical expression",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Mathematical expression to evaluate (e.g., '2 + 2', '10 * 5')"
+          }
+        },
+        "required": ["expression"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "The result of the mathematical expression evaluation"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if evaluation failed"
+          }
+        }
+      }
+    },
+    {
+      "name": "get_current_time",
+      "description": "Returns the current date and time",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "Current date and time in format YYYY-MM-DD HH:MM:SS"
+          }
+        }
+      }
+    }
+  ]
+}
+

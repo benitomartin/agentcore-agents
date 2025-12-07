@@ -65,10 +65,12 @@ def main() -> None:
         )
 
         logger.info("\nTesting agent with a simple prompt...")
-        test_prompt = "Can you give me the time?"
+        test_prompt = "What is 25 + 17?"
         logger.info(f"Prompt: {test_prompt}")
 
         response = agent(test_prompt)
+        # breakpoint()
+        logger.info(f"Response: {response}")
         logger.info(f"\nAgent response:\n{response.message['content'][0]['text']}")
 
         logger.info("\n✓ Gateway test successful!")
