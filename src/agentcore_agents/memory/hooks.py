@@ -24,7 +24,10 @@ class MemoryHookProvider(HookProvider):
         self._save_message(event)
 
     def _load_conversation_history(self, event: AgentInitializedEvent) -> None:
-        logger.info(f"Loading conversation history for actor_id={self.actor_id}, session_id={self.session_id}")
+        logger.info(
+            f"Loading conversation history for actor_id={self.actor_id}, "
+            "session_id={self.session_id}"
+        )
         try:
             recent_turns = self.memory_session.get_last_k_turns(k=10)
             if not recent_turns:
@@ -39,7 +42,10 @@ class MemoryHookProvider(HookProvider):
                     context_messages.append(f"{role}: {text}")
 
             context = "\n".join(context_messages)
-            logger.info(f"[{self.actor_id}:{self.session_id}] Context being injected into system prompt:\n{context}")
+            logger.info(
+                f"[{self.actor_id}:{self.session_id}] "
+                "Context being injected into system prompt:\n{context}"
+            )
 
             if event.agent.system_prompt:
                 event.agent.system_prompt += f"\n\nRecent conversation:\n{context}"
@@ -71,7 +77,8 @@ class MemoryHookProvider(HookProvider):
 
             event_id = result.get("eventId", "unknown")
             logger.info(
-                f"[{self.actor_id}:{self.session_id}] Stored message with Event ID: {event_id}, Role: {message_role.value}"
+                f"[{self.actor_id}:{self.session_id}] Stored message with Event ID: {event_id}, "
+                "Role: {message_role.value}"
             )
         except Exception as e:
             logger.error(f"[{self.actor_id}:{self.session_id}] Failed to save message: {e}")

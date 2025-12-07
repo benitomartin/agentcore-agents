@@ -13,10 +13,7 @@ class AgentMemoryManager:
     ) -> object:
         logger.info(f"Getting or creating memory: {name}")
         memory = self.manager.get_or_create_memory(
-            name=name, 
-            strategies=[], 
-            description=description, 
-            event_expiry_days=event_expiry_days
+            name=name, strategies=[], description=description, event_expiry_days=event_expiry_days
         )
         logger.info(f"Memory ID: {memory.id}")
         return memory

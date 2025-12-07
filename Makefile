@@ -19,6 +19,17 @@ agentcore-runtime: ## Run the Agentcore runtime
 	uv run src/agentcore_agents/runtime/handlers.py
 	@echo "Agentcore runtime completed."
 
+agentcore-gateway: ## Run the Agentcore gateway
+	@echo "Running the Agentcore gateway..."
+	uv run scripts/setup_gateway.py
+	@echo "Agentcore gateway completed."
+
+agentcore-gateway-cleanup: ## Clean up the Agentcore gateway
+	@echo "Cleaning up the Agentcore gateway..."
+	uv run scripts/cleanup_gateway.py
+	@echo "Agentcore gateway cleanup completed."
+
+
 ################################################################################
 ## Prek Commands
 ################################################################################

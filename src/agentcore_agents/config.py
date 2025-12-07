@@ -22,10 +22,26 @@ class MemorySettings(BaseSettings):
     session_id: str = Field(default="session_001")
 
 
+class CognitoSettings(BaseSettings):
+    user_pool_id: str | None = Field(default=None, alias="COGNITO_USER_POOL_ID")
+    client_id: str | None = Field(default=None, alias="COGNITO_CLIENT_ID")
+    client_secret: str | None = Field(default=None, alias="COGNITO_CLIENT_SECRET")
+    domain: str | None = Field(default=None, alias="COGNITO_DOMAIN")
+
+
+class GatewaySettings(BaseSettings):
+    gateway_id: str | None = Field(default=None, alias="GATEWAY_ID")
+    gateway_url: str | None = Field(default=None, alias="GATEWAY_URL")
+    name: str = Field(default="AgentGateway")
+    enable_semantic_search: bool = Field(default=True)
+
+
 class Settings(BaseSettings):
     aws: AWSSettings = Field(default_factory=AWSSettings)
     model: ModelSettings = Field(default_factory=ModelSettings)
     memory: MemorySettings = Field(default_factory=MemorySettings)
+    cognito: CognitoSettings = Field(default_factory=CognitoSettings)
+    gateway: GatewaySettings = Field(default_factory=GatewaySettings)
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
         env_file=".env",
