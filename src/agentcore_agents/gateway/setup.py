@@ -8,6 +8,8 @@ class GatewaySetup:
     def __init__(self, region: str | None = None) -> None:
         self.region = region or settings.aws.region
         self.client = GatewayClient(region_name=self.region)
+        if not hasattr(self.client, "logger"):
+            self.client.logger = logger
         logger.info(f"GatewaySetup initialized for region: {self.region}")
 
     def create_oauth_with_cognito(self, gateway_name: str = "AgentGateway") -> dict:
