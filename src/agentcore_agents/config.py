@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AWSSettings(BaseSettings):
-    region: str = Field(default="eu-central-1", alias="AWS_REGION")
+    region: str = Field(default="eu-central-1")
 
 
 class ModelSettings(BaseSettings):
@@ -23,17 +23,34 @@ class MemorySettings(BaseSettings):
 
 
 class CognitoSettings(BaseSettings):
-    user_pool_id: str | None = Field(default=None, alias="COGNITO_USER_POOL_ID")
-    client_id: str | None = Field(default=None, alias="COGNITO_CLIENT_ID")
-    client_secret: str | None = Field(default=None, alias="COGNITO_CLIENT_SECRET")
-    domain: str | None = Field(default=None, alias="COGNITO_DOMAIN")
+    user_pool_id: str | None = Field(default=None)
+    client_id: str | None = Field(default=None)
+    client_secret: str | None = Field(default=None)
+    domain: str | None = Field(default=None)
 
 
 class GatewaySettings(BaseSettings):
-    gateway_id: str | None = Field(default=None, alias="GATEWAY_ID")
-    gateway_url: str | None = Field(default=None, alias="GATEWAY_URL")
+    gateway_id: str | None = Field(default=None)
+    gateway_url: str | None = Field(default=None)
     name: str = Field(default="AgentGateway")
     enable_semantic_search: bool = Field(default=True)
+    lambda_target_name: str = Field(default="AgentTools")
+
+
+class LambdaSettings(BaseSettings):
+    function_name: str = Field(default="agentcore-gateway-tools")
+    role_name: str = Field(default="AgentCoreGatewayLambdaRole")
+    timeout: int = Field(default=30)
+    memory_size: int = Field(default=256)
+
+
+class BrowserSettings(BaseSettings):
+    name: str = Field(default="AgentBrowser")
+    description: str = Field(default="AgentCore Browser for web interactions")
+
+
+class S3Settings(BaseSettings):
+    documents_bucket: str = Field(default="model-optimized-bucket")
 
 
 class Settings(BaseSettings):
@@ -42,6 +59,9 @@ class Settings(BaseSettings):
     memory: MemorySettings = Field(default_factory=MemorySettings)
     cognito: CognitoSettings = Field(default_factory=CognitoSettings)
     gateway: GatewaySettings = Field(default_factory=GatewaySettings)
+    lambda_settings: LambdaSettings = Field(default_factory=LambdaSettings)
+    browser_tool: BrowserSettings = Field(default_factory=BrowserSettings)
+    s3: S3Settings = Field(default_factory=S3Settings)
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
         env_file=".env",

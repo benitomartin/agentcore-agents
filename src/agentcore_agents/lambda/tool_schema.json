@@ -43,6 +43,37 @@
           }
         }
       }
+    },
+    {
+      "name": "read_s3_document",
+      "description": "Reads a document from an S3 bucket or lists all files in the root if key is not provided. Supports text files (txt, json, csv, etc.) and returns file content. For binary files, returns metadata. If bucket is omitted, uses the default documents bucket. If key is omitted, lists all files in the bucket root.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "bucket": {
+            "type": "string",
+            "description": "The S3 bucket name. If omitted, uses the default documents bucket (model-optimized-bucket)."
+          },
+          "key": {
+            "type": "string",
+            "description": "The S3 object key (file path within the bucket). If omitted or empty, lists all files in the root of the bucket."
+          }
+        },
+        "required": []
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "The file content (for text files) or metadata (for binary files)"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if the file could not be read"
+          }
+        }
+      }
     }
   ]
 }

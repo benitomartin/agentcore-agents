@@ -1,5 +1,4 @@
-import json
-from pathlib import Path
+from typing import Any
 
 from loguru import logger
 from mcp.client.streamable_http import streamablehttp_client
@@ -11,30 +10,31 @@ from agentcore_agents.config import settings
 from agentcore_agents.gateway.setup import GatewaySetup
 
 
-def create_streamable_http_transport(mcp_url: str, access_token: str):
+def create_streamable_http_transport(mcp_url: str, access_token: str) -> Any:
     return streamablehttp_client(mcp_url, headers={"Authorization": f"Bearer {access_token}"})
 
 
 def main() -> None:
     logger.info("Testing Gateway with MCP")
 
-    config_path = Path("gateway_config.json")
-    if not config_path.exists():
-        logger.error(f"Config file not found: {config_path}")
+    setup = GatewaySetup()
+    gateway_name = settings.gateway.name
+
+    try:
+        gateway_info = setup.get_gateway_info(gateway_name)
+        client_info = setup.get_client_info_from_gateway(gateway_name)
+    except ValueError as e:
+        logger.error(f"Gateway not found: {e}")
         logger.info("Run setup_gateway.py first")
         return
 
-    with config_path.open() as f:
-        config = json.load(f)
+    logger.info(f"Gateway URL: {gateway_info['gateway_url']}")
 
-    logger.info(f"Gateway URL: {config['gateway_url']}")
-
-    setup = GatewaySetup(region=config["region"])
     logger.info("Getting OAuth access token...")
-    access_token = setup.get_access_token(config["client_info"])
+    access_token = setup.get_access_token(client_info, gateway_name)
     logger.info(f"Access token obtained (first 50 chars): {access_token[:50]}...")
 
-    gateway_mcp_url = config["gateway_url"]
+    gateway_mcp_url = gateway_info["gateway_url"]
     logger.info(f"MCP URL: {gateway_mcp_url}")
 
     logger.info("Connecting to Gateway via MCP...")
@@ -51,7 +51,7 @@ def main() -> None:
             )
 
         if not tools:
-            logger.warning("No tools found in Gateway. The demo Lambda may not have tools yet.")
+            logger.warning("No tools found in Gateway. Check Lambda configuration.")
             return
 
         logger.info("\nCreating agent with Gateway tools...")

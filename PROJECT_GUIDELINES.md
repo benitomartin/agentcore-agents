@@ -3,6 +3,10 @@
 
 ## Links
 
+CLI Commands
+
+https://docs.aws.amazon.com/cli/latest/reference/bedrock-agentcore-control/
+
 Agentcore
 https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-get-started-toolkit.html
 
@@ -23,6 +27,10 @@ https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-supported-
 
 - Tools
 - Identity
+
+https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/security-iam.html
+
+https://github.com/awslabs/amazon-bedrock-agentcore-samples/tree/main/01-tutorials/03-AgentCore-identity
 
 - Memory
 
@@ -50,4 +58,6 @@ if event_timestamp is None:
             event = response["event"]
             logger.info("Created event: %s", event["eventId"])
 ```
-If I imple
+
+
+Can you search in Amazon the book LLM Engineer's Handbook and tell me the price?
