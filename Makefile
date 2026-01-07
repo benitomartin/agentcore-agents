@@ -14,10 +14,15 @@ include .env
 ## Agentcore Commands
 #################################################################################
 
-agentcore-runtime: ## Run the Agentcore runtime
-	@echo "Running the Agentcore runtime..."
-	uv run src/agentcore_agents/runtime/handlers.py
-	@echo "Agentcore runtime completed."
+agentcore-s3-setup: ## Create S3 bucket for documents
+	@echo "Setting up S3 bucket..."
+	uv run scripts/setup_s3.py
+	@echo "S3 bucket setup completed."
+
+agentcore-lambda-deploy: ## Deploy Lambda function for Gateway tools
+	@echo "Deploying Lambda function..."
+	uv run scripts/deploy_lambda.py
+	@echo "Lambda deployment completed."
 
 agentcore-gateway: ## Run the Agentcore gateway
 	@echo "Running the Agentcore gateway..."
@@ -29,10 +34,6 @@ agentcore-gateway-cleanup: ## Clean up the Agentcore gateway
 	uv run scripts/cleanup_gateway.py
 	@echo "Agentcore gateway cleanup completed."
 
-agentcore-lambda-deploy: ## Deploy Lambda function for Gateway tools
-	@echo "Deploying Lambda function..."
-	uv run scripts/deploy_lambda.py
-	@echo "Lambda deployment completed."
 
 
 ################################################################################

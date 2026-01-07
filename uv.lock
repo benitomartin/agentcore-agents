@@ -26,6 +26,9 @@ lint = [
     { name = "mypy" },
     { name = "ruff" },
 ]
+test = [
+    { name = "requests" },
+]
 
 [package.metadata]
 requires-dist = [
@@ -46,7 +49,7 @@ lint = [
     { name = "mypy", specifier = ">=1.18.2" },
     { name = "ruff", specifier = ">=0.14.2" },
 ]
-test = []
+test = [{ name = "requests", specifier = ">=2.31.0" }]
 
 [[package]]
 name = "aiohappyeyeballs"

@@ -75,8 +75,8 @@ def main() -> None:
 
     logger.info(f"\n✓ User authentication config saved to: {config_path_user}")
     logger.info("\nNext steps:")
-    logger.info("1. Update test_gateway.py to use user token instead of client credentials")
-    logger.info("2. Test Gateway with user token")
+    logger.info("1. Run tests/test_agent_with_user_identity.py to test Gateway with user authentication")
+    logger.info("2. Run tests/test_gateway_auth_rejection.py to verify security")
     logger.info("3. Check Lambda logs to see if user identity appears in context")
 
 

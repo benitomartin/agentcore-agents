@@ -30,6 +30,7 @@ lint = [
     "ruff>=0.14.2",
 ]
 test = [
+    "requests>=2.31.0",
 ]
 
 [build-system]
