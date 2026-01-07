@@ -1,6 +1,6 @@
 # Deployment Guide
 
-Simple step-by-step guide to deploy and test the AgentCore Gateway setup.
+Simple step-by-step guide to deploy and test the AgentCore agent.
 
 ## Prerequisites
 
@@ -46,9 +46,29 @@ uv run scripts/setup_user_auth.py
 
 Creates a test user in Cognito for authentication.
 
+### 5. Configure and Deploy Agent
+
+```bash
+uv run agentcore configure
+```
+
+Follow prompts to configure the agent. Then deploy:
+
+```bash
+uv run agentcore deploy
+```
+
+### 6. Add Runtime Permissions
+
+```bash
+uv run scripts/setup_runtime_permissions.py
+```
+
+Adds required IAM permissions for Gateway and Memory access.
+
 ## Testing
 
-### Run Gateway Test with User Identity
+### Test Locally
 
 ```bash
 uv run tests/test_agent_with_user_identity.py
@@ -61,13 +81,29 @@ Tests:
 - Memory persistence
 - Multi-turn conversations
 
-### Run Authentication Rejection Test
+### Test Deployed Agent
 
 ```bash
-uv run tests/test_gateway_auth_rejection.py
-```
+TOKEN=$(uv run python -c "
+from agentcore_agents.auth.cognito import get_user_token
+from agentcore_agents.auth.secrets_manager import get_client_secret
+from agentcore_agents.gateway.setup import GatewaySetup
+from agentcore_agents.config import settings
 
-Verifies that Gateway correctly rejects unauthorized access.
+setup = GatewaySetup()
+client_info = setup.get_client_info_from_gateway()
+client_secret = get_client_secret(settings.gateway.name, setup.region)
+token_data = get_user_token(
+    client_info['client_id'],
+    client_secret,
+    'testuser',
+    'TestPassword123!'
+)
+print(token_data['access_token'])
+")
+
+uv run agentcore invoke '{"prompt": "What is 2 + 2?"}' --bearer-token "$TOKEN"
+```
 
 ## Cleanup
 
@@ -77,7 +113,7 @@ To remove all deployed resources:
 make agentcore-gateway-cleanup
 ```
 
-**Note:** This does NOT delete the Lambda function or S3 bucket. Delete those manually via AWS Console or CLI if needed.
+**Note:** This does NOT delete the Lambda function, S3 bucket, or deployed agent. Delete those manually via AWS Console or CLI if needed.
 
 ## Environment Variables
 

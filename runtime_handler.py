@@ -21,33 +21,24 @@ app = BedrockAgentCoreApp()
 @app.entrypoint
 def invoke(payload: dict[str, Any], context: Any) -> dict[str, Any]:
     try:
-        logger.info(f"Runtime received payload: {payload}")
-        logger.info(f"Context type: {type(context)}")
-
         prompt = payload.get("prompt", "")
         
-        # Get bearer token from context (RequestContext has request_headers attribute)
+        # Get bearer token from request headers
         bearer_token = None
+        if hasattr(context, "request_headers") and isinstance(context.request_headers, dict):
+            auth_header = (
+                context.request_headers.get("Authorization")
+                or context.request_headers.get("authorization")
+            )
+            if auth_header and isinstance(auth_header, str) and auth_header.startswith("Bearer "):
+                bearer_token = auth_header[7:]
         
-        # RequestContext uses request_headers (not headers)
-        if hasattr(context, "request_headers") and context.request_headers:
-            request_headers = context.request_headers
-            logger.info(f"Context.request_headers: {request_headers}")
-            if isinstance(request_headers, dict):
-                auth_header = request_headers.get("Authorization") or request_headers.get("authorization")
-                if auth_header and isinstance(auth_header, str) and auth_header.startswith("Bearer "):
-                    bearer_token = auth_header[7:]  # Remove "Bearer " prefix
-                    logger.info("Bearer token found in request_headers")
-        
-        # Also check if token is in payload (alternative method)
         if not bearer_token:
             bearer_token = payload.get("bearer_token") or payload.get("access_token")
         
         if not bearer_token:
-            logger.error("No bearer token found in request. Use --bearer-token when invoking.")
-            return {
-                "error": "Authentication required. Please provide a bearer token using --bearer-token"
-            }
+            logger.error("No bearer token found in request")
+            return {"error": "Authentication required. Please provide a bearer token"}
         
         logger.info("Bearer token found, proceeding with agent creation")
         
@@ -58,30 +49,22 @@ def invoke(payload: dict[str, Any], context: Any) -> dict[str, Any]:
 
         logger.info(f"Creating agent for actor_id={actor_id}, session_id={session_id}")
 
-        # Get Gateway URL - try from config/env first, then query API, then use known URL
-        gateway_mcp_url = None
+        # Get Gateway URL - try from config/env first, then query API, then fallback
+        gateway_mcp_url = settings.gateway.gateway_url
         
-        # Try from settings/config (from GATEWAY__GATEWAY_URL env var)
-        if settings.gateway.gateway_url:
-            gateway_mcp_url = settings.gateway.gateway_url
-            logger.info(f"Using Gateway URL from config: {gateway_mcp_url}")
-        
-        # If not in config, try to query (requires IAM permissions)
         if not gateway_mcp_url:
             try:
                 setup = GatewaySetup()
-                gateway_name = settings.gateway.name
-                gateway_info = setup.get_gateway_info(gateway_name)
+                gateway_info = setup.get_gateway_info(settings.gateway.name)
                 gateway_mcp_url = gateway_info["gateway_url"]
                 logger.info(f"Retrieved Gateway URL from API: {gateway_mcp_url}")
-            except (ValueError, Exception) as e:
+            except Exception as e:
                 logger.warning(f"Could not get Gateway URL from API: {e}")
-                # Fallback to known gateway URL (from your setup)
                 gateway_mcp_url = "https://agentgateway-3sqyxtamyl.gateway.bedrock-agentcore.eu-central-1.amazonaws.com/mcp"
                 logger.info(f"Using fallback Gateway URL: {gateway_mcp_url}")
         
         if not gateway_mcp_url:
-            return {"error": "Gateway URL not configured."}
+            return {"error": "Gateway URL not configured"}
 
         # Use same token for Gateway access (same as test files)
         with StrandsAgentWrapper(

@@ -1,12 +1,9 @@
-import logging
 import os
 from datetime import datetime
 from typing import Any
 
 import boto3
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+from loguru import logger
 
 s3_client = boto3.client("s3")
 

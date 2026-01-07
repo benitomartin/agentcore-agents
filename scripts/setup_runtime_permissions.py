@@ -87,22 +87,18 @@ def main() -> None:
     if args.role_name:
         role_name = args.role_name
     else:
-        # Try to get from .bedrock_agentcore.yaml
         try:
             import yaml
-
             with open(".bedrock_agentcore.yaml") as f:
                 config = yaml.safe_load(f)
                 default_agent = config.get("default_agent")
                 agent_config = config.get("agents", {}).get(default_agent, {})
                 execution_role_arn = agent_config.get("aws", {}).get("execution_role", "")
                 if execution_role_arn:
-                    # Extract role name from ARN
                     role_name = execution_role_arn.split("/")[-1]
                     logger.info(f"Found execution role from config: {role_name}")
                 else:
                     logger.error("No execution role found in .bedrock_agentcore.yaml")
-                    logger.info("Please specify --role-name")
                     sys.exit(1)
         except Exception as e:
             logger.error(f"Could not read config: {e}")
