@@ -9,4 +9,8 @@ wheels/
 # Virtual environments
 .venv
 
-.bedrock_agentcore
+# AgentCore configuration (contains sensitive data)
+.bedrock_agentcore.yaml
+
+# User auth configuration (contains sensitive data)
+user_auth_config.json
