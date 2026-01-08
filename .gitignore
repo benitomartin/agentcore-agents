@@ -9,6 +9,7 @@ wheels/
 # Virtual environments
 .venv
 
+.bedrock_agentcore/
 # AgentCore configuration (contains sensitive data)
 .bedrock_agentcore.yaml
 
