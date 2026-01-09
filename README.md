@@ -76,8 +76,6 @@ agentcore-agents/
 ├── tests/                                              # Test files
 │   ├── test_agent_with_user_identity.py                # Test with user authentication
 │   └── test_gateway_auth_rejection.py                  # Test authentication rejection
-├── .bedrock_agentcore.yaml                             # AgentCore runtime configuration
-├── DEPLOYMENT_GUIDE.md                                 # Detailed deployment instructions
 ├── Makefile                                            # Build and deployment commands
 ├── pyproject.toml                                      # Project dependencies and config
 ├── runtime_handler.py                                  # AgentCore Runtime entrypoint
@@ -146,9 +144,7 @@ Configure AWS settings, Gateway URLs, and memory settings by editing:
 
 ### Deployment
 
-See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed deployment instructions.
-
-Quick deployment steps:
+Deployment steps:
 
 1. **Setup S3 bucket:**
    ```bash
@@ -172,7 +168,7 @@ Quick deployment steps:
 
 5. **Configure and deploy agent:**
    ```bash
-   uv run agentcore configure
+   uv run agentcore configure --entrypoint runtime_handler.py
    uv run agentcore deploy
    ```
 
@@ -220,8 +216,26 @@ print(token_data['access_token'])
 ")
 
 # Invoke deployed agent
-uv run agentcore invoke '{"prompt": "What is 2 + 2?"}' --bearer-token "$TOKEN"
+agentcore invoke '{"prompt": "Can you tell me how many documents are in the S3 bucket?"}' --bearer-token "$TOKEN"
 ```
+
+### Cleanup
+
+Do not forget to delete all resources:
+
+- AgentCore Gateway and targets
+- Cognito User Pool and Client
+- Lambda function and IAM role
+- AgentCore Runtime (agent)
+- AgentCore Memory
+- Secrets Manager secrets
+
+### Environment Variables
+
+Optional test user credentials (defaults provided):
+- `COGNITO_TEST_USERNAME` (default: `testuser`)
+- `COGNITO_TEST_PASSWORD` (default: `TestPassword123!`)
+- `COGNITO_TEST_EMAIL` (default: `testuser@example.com`)
 
 ### Quality Checks
 
@@ -263,7 +277,3 @@ Individual Commands:
   ```bash
   make clean
   ```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
