@@ -29,7 +29,7 @@ def add_runtime_permissions(role_name: str) -> None:
         ],
     }
 
-    # Memory permissions
+    # Memory permissions - using wildcard as some AgentCore actions require it
     memory_policy = {
         "Version": "2012-10-17",
         "Statement": [

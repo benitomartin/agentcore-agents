@@ -68,7 +68,6 @@ agentcore-agents/
 │       └── prompts/                                    # System prompts
 │           └── system.py                               # Agent system prompt
 ├── scripts/                                            # Deployment and setup scripts
-│   ├── cleanup_gateway.py                              # Cleanup Gateway resources
 │   ├── deploy_lambda.py                                # Deploy Lambda function
 │   ├── setup_gateway.py                                # Setup Gateway and Cognito
 │   ├── setup_runtime_permissions.py                    # Add IAM permissions for runtime

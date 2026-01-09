@@ -255,8 +255,3 @@ class GatewaySetup:
                 for tool in schema_data["tools"]
             ]
         }
-
-    def cleanup_gateway(self, gateway_id: str, client_info: dict) -> None:
-        logger.info(f"Cleaning up gateway: {gateway_id}")
-        self.client.cleanup_gateway(gateway_id, client_info)
-        logger.info("Gateway cleanup completed")

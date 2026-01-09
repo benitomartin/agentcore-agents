@@ -102,18 +102,14 @@ token_data = get_user_token(
 print(token_data['access_token'])
 ")
 
-uv run agentcore invoke '{"prompt": "What is 2 + 2?"}' --bearer-token "$TOKEN"
+agentcore invoke '{"prompt": "Can you tell me how many documents are in the S3 bucket?"}' --bearer-token "$TOKEN"
 ```
 
 ## Cleanup
 
-To remove all deployed resources:
+Do not forget to delete all created ressources.
 
-```bash
-make agentcore-gateway-cleanup
-```
-
-**Note:** This does NOT delete the Lambda function, S3 bucket, or deployed agent. Delete those manually via AWS Console or CLI if needed.
+**Note:** This does NOT delete the cognito user pool, S3 bucket, or deployed agent. Delete those manually via AWS Console or CLI if needed.
 
 ## Environment Variables
 

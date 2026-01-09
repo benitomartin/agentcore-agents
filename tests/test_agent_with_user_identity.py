@@ -55,13 +55,13 @@ def main() -> None:
         gateway_url=gateway_mcp_url,
         access_token=user_access_token,
     ) as agent:
-        # test_prompt = "Can you check the documents in the S3 Bucket?"
-        # response = agent.run(test_prompt)
-        # logger.info(f"Agent response: {response['response']['content'][0]['text']}")
+        test_prompt = "Can you check the documents in the S3 Bucket?"
+        response = agent.run(test_prompt)
+        logger.info(f"Agent response: {response['response']['content'][0]['text']}")
         
-        # follow_up = "Can you read the content of the file?"
-        # response2 = agent.run(follow_up)
-        # logger.info(f"Agent response: {response2['response']['content'][0]['text']}")
+        follow_up = "How many documents are in the S3 Bucket?"
+        response2 = agent.run(follow_up)
+        logger.info(f"Agent response: {response2['response']['content'][0]['text']}")
 
         follow_up = "Can you summarize the conversation so far?"
         response3 = agent.run(follow_up)

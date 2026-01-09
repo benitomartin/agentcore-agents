@@ -29,12 +29,15 @@ agentcore-gateway: ## Run the Agentcore gateway
 	uv run scripts/setup_gateway.py
 	@echo "Agentcore gateway completed."
 
-agentcore-gateway-cleanup: ## Clean up the Agentcore gateway
-	@echo "Cleaning up the Agentcore gateway..."
-	uv run scripts/cleanup_gateway.py
-	@echo "Agentcore gateway cleanup completed."
+agentcore-user-auth: ## Setup user authentication
+	@echo "Setting up user authentication..."
+	uv run scripts/setup_user_auth.py
+	@echo "User authentication setup completed."
 
-
+agentcore-runtime-permissions: ## Setup runtime permissions
+	@echo "Setting up runtime permissions..."
+	uv run scripts/setup_runtime_permissions.py
+	@echo "Runtime permissions setup completed."
 
 ################################################################################
 ## Prek Commands

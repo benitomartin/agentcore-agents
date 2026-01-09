@@ -1,9 +1,12 @@
+import logging
 import os
 from datetime import datetime
 from typing import Any
 
 import boto3
-from loguru import logger
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 s3_client = boto3.client("s3")
 
@@ -33,12 +36,16 @@ def list_s3_files(bucket: str | None = None, prefix: str = "") -> str:
             for obj in response["Contents"]:
                 key = obj["Key"]
                 size = obj["Size"]
-                files.append(f"{key} ({size} bytes)")
+                files.append(f"- {key} ({size} bytes)")
 
         if not files:
             return f"No files found in s3://{bucket}/{prefix or 'root'}"
 
-        return f"Files in s3://{bucket}/{prefix or 'root'}:\n" + "\n".join(files)
+        file_list = "\n".join(files)
+        instruction = (
+            "To read a file, use the exact key (file path) shown above as the 'key' parameter."
+        )
+        return f"Files in s3://{bucket}/{prefix or 'root'}:\n{file_list}\n\n{instruction}"
 
     except Exception as e:
         return f"Error listing files: {str(e)}"

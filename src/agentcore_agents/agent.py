@@ -69,7 +69,7 @@ class StrandsAgentWrapper:
                 "use_gateway=True is required. Local tools have been removed. "
                 "Please use Gateway tools by setting use_gateway=True and "
                 "providing gateway_url and access_token."
-            )
+        )
 
         self.agent = Agent(
             model=model,

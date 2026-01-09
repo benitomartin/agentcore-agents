@@ -46,7 +46,7 @@
     },
     {
       "name": "read_s3_document",
-      "description": "Reads a document from an S3 bucket or lists all files in the root if key is not provided. Supports text files (txt, json, csv, etc.) and returns file content. For binary files, returns metadata. If bucket is omitted, uses the default documents bucket. If key is omitted, lists all files in the bucket root.",
+      "description": "Reads a document from an S3 bucket. To read a file, you MUST provide the 'key' parameter with the exact file path/name from the bucket. To list files first, call this tool without the 'key' parameter (or with empty key). Supports text files (txt, json, csv, etc.) and returns file content. For binary files (PDF, images, etc.), returns metadata. If bucket is omitted, uses the default documents bucket (model-optimized-bucket). IMPORTANT: When asked to read a file, you must specify the exact 'key' value from the file listing.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -56,7 +56,7 @@
           },
           "key": {
             "type": "string",
-            "description": "The S3 object key (file path within the bucket). If omitted or empty, lists all files in the root of the bucket."
+            "description": "The S3 object key (exact file path/name within the bucket, e.g., 'mercury-wire-receipt-2025-12-08-6f41.pdf'). REQUIRED to read a file. If omitted or empty, this tool will list all files in the bucket root instead of reading."
           }
         },
         "required": []
