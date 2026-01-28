@@ -79,7 +79,7 @@ agentcore-agents/
 ├── Makefile                                            # Build and deployment commands
 ├── pyproject.toml                                      # Project dependencies and config
 ├── runtime_handler.py                                  # AgentCore Runtime entrypoint
-└── README.md                                           # This file
+└── README.md                                           # Project README
 ```
 
 ## Prerequisites
